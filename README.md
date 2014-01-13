@@ -60,11 +60,13 @@ val ode : Try[OdeSolverT] = Factory(Solver.RKE56, 0.2, (0.0, List(1.0, 0.0)), Li
   }
     case _ => println("failed")
   }
+
+//////////////////////////////////////
+
+method : RKEmbedded56 for 0.15<br>
+returned : 0.8910063287560628, 0.4539905878227192 <br>
+exact    : 0.8910065241883679, 0.45399049973954675
+
+
 ```
-> 
-> method : RKEmbedded56 for 0.15<br>
-> returned : 0.8910063287560628, 0.4539905878227192 <br>
-> exact    : 0.8910065241883679, 0.45399049973954675
->
->
 
