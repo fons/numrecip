@@ -17,7 +17,7 @@ object LinearSystemSolverExample1 {
          2 * x_0 + 3*x_1 +     x_3 = 11
          3 * x_0 +   x_1 + 2 * x_3 = 12
 
-      // Initialize a Matrix with the left and right hand side coefffiecients of
+      // Initialize a Matrix with the left and right hand side coefficients of
       //
 
       **/
