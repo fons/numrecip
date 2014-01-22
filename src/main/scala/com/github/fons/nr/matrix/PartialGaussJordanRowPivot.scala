@@ -90,4 +90,6 @@ case object PartialGaussJordanRowPivot extends LinearSystemsSolverT with RowPivo
 
 trait PartialGaussJordanRowPivot extends LinearSystemsSolverT {
   override def apply(m: Matrix, c: Matrix): Option[Matrix] = PartialGaussJordanRowPivot(m, c)
+  override
+  def solverName = thisName(this)
 }

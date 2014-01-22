@@ -30,6 +30,10 @@ package com.github.fons.nr.interpolation
 //TODO : data set type
 
 trait InterpolatorT {
+  protected def className[A](a: A)(implicit m: Manifest[A]) = m.toString
+
   protected def initialize (dataSet: DataSet): Option[Vector[InterpolationSet]] = None
   def apply(x: Double): Option[Vector[Option[Double]]]  = None
+
+  def interpolatorName = className(this)
 }

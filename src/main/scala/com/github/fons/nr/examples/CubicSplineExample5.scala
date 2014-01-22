@@ -21,10 +21,7 @@ object CubicSplineExample5 {
   def run {
     val ll = Vector(0.0, 1.0, 2.0, 3.0)
     val vs = Vector(0.0, 0.5, 2.0, 1.5)
-    val cs = new {
-      val deriv2nd0 :Double = -0.3
-      val deriv2ndN :Double = 3.3
-    } with Interpolator(DataSet(ll, vs)) with CubicSpline with CurvatureAdjustedSpline with LUSolver
+    val cs = new { val derivs = SecondOrderDerivs(-0.3, 3.3) } with Interpolator(DataSet(ll, vs)) with CubicSpline with CurvatureAdjustedSpline with LUSolver
 
     println(ll)
     println(vs)

@@ -61,5 +61,7 @@ case class Interpolator(dataSet: DataSet) extends InterpolatorT  {
       case _ => None
     }
   }
+
+  override def toString: String = className(this) + " interpolator : " + interpolatorName
 }
 

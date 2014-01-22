@@ -146,4 +146,6 @@ case object PartialGaussJordanFullPivot extends LinearSystemsSolverT with FullPi
 
 trait PartialGaussJordanFullPivot extends LinearSystemsSolverT {
   override def apply(m: Matrix, c: Matrix): Option[Matrix] = PartialGaussJordanFullPivot(m, c)
+  override
+  def solverName = thisName(this)
 }

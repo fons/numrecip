@@ -39,7 +39,7 @@ object Main extends App {
     }
   }
    //CubicSplineExample1.run
-   CubicSplineExample5.run
+   CubicSplineExample3.run
 //  val m1 = Map('a'->10, 'b' -> 20)
 //  println(m1)
 //  val m2 = m1 + ('a'->100, 'b'->67)

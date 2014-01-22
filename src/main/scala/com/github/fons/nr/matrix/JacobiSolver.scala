@@ -15,4 +15,6 @@ case class JacobiSolver(acc: Accuracy = Accuracy(), max: Int = 200, probe: Int =
 
   override def apply(m: Matrix, c: Matrix): Option[Matrix] = None //solve(m,c)
 
+  override
+  def solverName = className(this)
 }

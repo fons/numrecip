@@ -55,4 +55,7 @@ trait NormalSpline extends SplineStrategyT with LinearSystemsSolverT {
     val M = new Matrix(main, dim, dim)
     apply(M, C).map(_ :|>:+ Matrix(List(List(0.0))) :|<:+ Matrix(List(List(0.0)))).map(_.values((x, y) => true))
   }
+
+  override
+  def strategyName = className(this)  + " with solver " + solverName
 }

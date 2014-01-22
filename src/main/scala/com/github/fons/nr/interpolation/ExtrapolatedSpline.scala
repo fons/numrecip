@@ -14,7 +14,7 @@ trait ExtrapolatedSpline extends SplineStrategyT with LinearSystemsSolverT {
   private def end_points(delta_x : Vector[Double], v : Vector[Double]) : Option[Vector[Double]] = {
     val last = v.length - 1
     val last_delta = delta_x.length - 1
-    val m0 = v(0) - delta_x(0) * (v(1) - v(0))/delta_x(1)
+    val m0 = v.head - delta_x.head * (v.tail.head - v.head)/delta_x(1)
     val mN = v(last) + (v(last) - v(last - 1)) * (delta_x(last_delta)/delta_x(last_delta-1))
     Some(m0 +: v :+ mN)
   }
@@ -49,5 +49,6 @@ trait ExtrapolatedSpline extends SplineStrategyT with LinearSystemsSolverT {
     apply(M, C).map(_.values((x, y) => true)).flatMap(end_points(delta_x, _))
 
   }
-
+  override
+  def strategyName = className(this)  + " with solver " + solverName
 }

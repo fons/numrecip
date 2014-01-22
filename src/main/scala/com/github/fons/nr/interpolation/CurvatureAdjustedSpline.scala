@@ -11,13 +11,12 @@ import com.github.fons.nr.matrix.{LinearSystemsSolverT, Matrix}
  */
 trait CurvatureAdjustedSpline extends SplineStrategyT with LinearSystemsSolverT {
 
-  val deriv2nd0 : Double
-  val deriv2ndN : Double
+  val derivs : SecondOrderDerivs
 
   private
   def end_points(rat_yx : Vector[Double], delta_x : Vector[Double], v : Vector[Double]) : Option[Vector[Double]] = {
-    val m0 = deriv2nd0
-    val mN = deriv2ndN
+    val m0 = derivs.first
+    val mN = derivs.last
     Some(m0 +: v :+ mN)
   }
 
@@ -31,17 +30,12 @@ trait CurvatureAdjustedSpline extends SplineStrategyT with LinearSystemsSolverT 
     println(rat_yx)
     val nc   = rat_yx.zip(rat_yx.tail).map((x) => List(6.0 * (x._2 - x._1)))
 
-    val c0   = nc(0)(0)
-    val nc1  = nc.updated(0, nc(0).updated(0, c0 - delta_x.head * deriv2nd0 ) )
-    println("===================================")
-    println(nc)
-    println(deriv2nd0, deriv2ndN, rat_yx(0))
-    println(nc1)
-    println("===================================")
-    val last = nc1.length - 1
-    val cN   = nc1(last)(0)
-    val nc2  = nc1.updated(last, nc1(last).updated(0, cN - delta_x.last * deriv2ndN ) )
-    println(last, rat_yx(last), nc2)
+    val c0   = nc.head.head
+    val nc1  = nc.updated(0, nc.head.updated(0, c0 - delta_x.head * derivs.first ) )
+
+    val cN   = nc1.last.head
+    val nc2  = nc1.updated(nc1.length - 1, nc1.last.updated(0, cN - delta_x.last * derivs.last ) )
+
     val C = Matrix(nc2.toList)
 
     val dim = (indep.length - 2)
@@ -71,4 +65,6 @@ trait CurvatureAdjustedSpline extends SplineStrategyT with LinearSystemsSolverT 
 
   }
 
+  override
+  def strategyName = className(this) + " with solver " + solverName
 }

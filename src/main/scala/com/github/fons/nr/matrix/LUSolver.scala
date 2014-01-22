@@ -43,4 +43,6 @@ case object LUSolver extends LinearSystemsSolverT {
 
 trait LUSolver extends LinearSystemsSolverT {
   override def apply(m: Matrix, c: Matrix): Option[Matrix] = LUSolver(m, c)
+  override
+  def solverName = thisName(this)
 }

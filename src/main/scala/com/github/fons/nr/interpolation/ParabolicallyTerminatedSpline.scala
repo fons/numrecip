@@ -32,13 +32,7 @@ import com.github.fons.nr.matrix.{LinearSystemsSolverT, Matrix}
 trait ParabolicallyTerminatedSpline extends SplineStrategyT with LinearSystemsSolverT {
 
   private
-  def end_points(v : Vector[Double]) : Option[Vector[Double]] = {
-    val last = v.length - 1
-    val m0 = v(0)
-    val mN = v(last)
-    Some(m0 +: v :+ mN)
-  }
-
+  def end_points(v : Vector[Double]) : Option[Vector[Double]] = Some(v.head +: v :+ v.last)
 
   override
   def strategy(indep: Vector[Double], data: Vector[Double]): Option[Vector[Double]] = {
@@ -72,5 +66,6 @@ trait ParabolicallyTerminatedSpline extends SplineStrategyT with LinearSystemsSo
     apply(M, C).map(_.values((x, y) => true)).flatMap(end_points(_))
 
   }
-
+  override
+  def strategyName = className(this)  + " with solver " + solverName
 }

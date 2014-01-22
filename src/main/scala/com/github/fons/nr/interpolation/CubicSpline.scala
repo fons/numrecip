@@ -33,6 +33,10 @@ import scala.annotation.tailrec
 
 trait CubicSpline extends InterpolatorT with SplineStrategyT {
 
+  override
+  protected
+  def className[A](a: A)(implicit m: Manifest[A]) = m.toString
+
   private
   case class Spline(from: Double, to: Double, s1: Double, s2: Double, s3: Double, y: Double) extends InterpolationT {
     private def S(w: Double) = Some(((s3 * w + s2) * w + s1) * w + y)
@@ -54,11 +58,7 @@ trait CubicSpline extends InterpolatorT with SplineStrategyT {
         val s1 = rat_yx(index) - delta_x(index) * (2.0 * m(index) + m(index + 1)) / 6.0
         val s2 = m(index) * .5
         val s3 = (m(index + 1) - m(index)) / (6.0 * delta_x(index))
-        val spl = Spline(indep(index), indep(index + 1), s1, s2, s3, data(index))
-        println("----------------------------")
-        println(s1, s2, s3, data(index), indep(index))
-        println("----------------------------")
-        spl
+        Spline(indep(index), indep(index + 1), s1, s2, s3, data(index))
       }).toVector)
       case _ => None
     }
@@ -68,5 +68,7 @@ trait CubicSpline extends InterpolatorT with SplineStrategyT {
   protected
   def initialize(dataSet: DataSet): Option[Vector[InterpolationSet]] = Some(for (y <- dataSet.dependend) yield InterpolationSet(initialize_helper(dataSet.independend, y)))
 
+  override
+  def interpolatorName = className(this) + " with strategy " + strategyName
 
 }

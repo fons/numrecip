@@ -30,6 +30,10 @@ package com.github.fons.nr.matrix
 
 //abstract class
 trait LinearSystemsSolverT {
+  protected def thisName[A](a: A)(implicit m: Manifest[A]) = m.toString
+
   def apply(m: Matrix, c: Matrix): Option[Matrix] = None
+
+  def solverName = thisName(this)
 
 }
