@@ -1,8 +1,26 @@
+/*
+ * Copyright (c) 2014.
+ *
+ * This file PartialGaussJordanFullPivot.scala is part of numrecip (numrecip)
+ *
+ *     numrecip / PartialGaussJordanFullPivot.scala is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     numrecip / PartialGaussJordanFullPivot.scala is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with numrecip.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.github.fons.nr.matrix
 
 import scala.annotation.tailrec
 import scala.Some
-import scala.util.{Try, Success, Failure}
 
 /**
  * Created with IntelliJ IDEA.
@@ -123,4 +141,11 @@ case object PartialGaussJordanFullPivot extends LinearSystemsSolverT with FullPi
 
   override lazy val toString = productPrefix + " using " + pivotName
 
+}
+
+
+trait PartialGaussJordanFullPivot extends LinearSystemsSolverT {
+  override def apply(m: Matrix, c: Matrix): Option[Matrix] = PartialGaussJordanFullPivot(m, c)
+  override
+  def solverName = thisName(this)
 }

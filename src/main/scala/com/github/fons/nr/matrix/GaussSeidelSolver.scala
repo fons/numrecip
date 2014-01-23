@@ -31,5 +31,6 @@ case class GaussSeidelSolver(acc: Accuracy = Accuracy(), max: Int = 200, probe: 
 
   final def nextEstimate(est: Matrix, b: Matrix, d: Matrix): Option[Matrix] = relax(0, est, b, d)
 
-
+  override
+  def solverName = className(this)
 }
