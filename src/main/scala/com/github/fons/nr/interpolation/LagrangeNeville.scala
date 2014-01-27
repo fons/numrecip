@@ -73,5 +73,5 @@ trait LagrangeNeville extends InterpolatorT with StrategyT[(Int,Int, Int)] with 
   def initialize(dataSet: DataSet): Option[Vector[InterpolationSet]] = Some(for (y <- dataSet.dependend) yield InterpolationSet(initialize_helper(dataSet.independend, y)))
 
   override
-  def interpolatorName: String = strategyClassName(this)
+  def interpolatorName: String = strategyClassName(this) + " using strategy : " + strategyName + " with Degree " + Degree
 }

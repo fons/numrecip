@@ -45,7 +45,7 @@ trait BasicNevilleStrategy extends StrategyT[(Int, Int,Int)] with Degree {
       val from  = if ((fromt - off2) > 0) (fromt - off2) else 0
       (index, from,to)
     } ).toVector
-    println(v)
+
    Some(v)
   }
 
