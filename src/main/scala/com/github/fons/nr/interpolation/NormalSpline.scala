@@ -30,7 +30,7 @@ import com.github.fons.nr.matrix.{Matrix, LinearSystemsSolverT}
  */
 
 
-trait NormalSpline extends SplineStrategyT with LinearSystemsSolverT {
+trait NormalSpline extends SplineStrategy with LinearSystemsSolverT {
   override
   def strategy(indep: Vector[Double], data: Vector[Double]): Option[Vector[Double]] = {
     lazy val range_x = indep.zip(indep tail)
@@ -39,6 +39,7 @@ trait NormalSpline extends SplineStrategyT with LinearSystemsSolverT {
     lazy val rat_yx = delta_y.zip(delta_x).map((x) => x._1 / x._2)
 
     val C = Matrix(rat_yx.zip(rat_yx.tail).map((x) => List(6.0 * (x._2 - x._1))).toList)
+
     val dim = (indep.length - 2)
     //TODO : This can be optimized as this is a band matrix
     val main = (for (n <- Range(0, dim);
@@ -52,10 +53,12 @@ trait NormalSpline extends SplineStrategyT with LinearSystemsSolverT {
 
       //    }
     }).toMap
+
     val M = new Matrix(main, dim, dim)
+
     apply(M, C).map(_ :|>:+ Matrix(List(List(0.0))) :|<:+ Matrix(List(List(0.0)))).map(_.values((x, y) => true))
   }
 
   override
-  def strategyName = className(this)  + " with solver " + solverName
+  def strategyName = strategyClassName(this)  + " with solver " + solverName
 }

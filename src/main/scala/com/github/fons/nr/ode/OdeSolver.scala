@@ -12,7 +12,7 @@ import scala.annotation.tailrec
 
 import scala.util.{Try, Success, Failure}
 
-class OdeSolver(private val step: Double, private val init: (Double, List[Double]), private val Func: List[(Double, Double *) => Double]) extends OdeSolverT with OdeStepT with MemoizeT {
+class OdeSolver(private val step: Double, private val init: (Double, List[Double]), private val Func: List[(Double, Double*) => Double]) extends OdeSolverT with OdeStepT with MemoizeT {
 
   @tailrec private def run(count: Int, fstep: Double, xtuple: (Double, List[Double]), m: MemoizeT): (Try[(Double, List[Double])], MemoizeT) = {
     count match {

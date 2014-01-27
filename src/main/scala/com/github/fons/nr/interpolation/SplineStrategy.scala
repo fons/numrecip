@@ -1,14 +1,14 @@
 /*
  * Copyright (c) 2014.
  *
- * This file InterpolationSet.scala is part of numrecip (numrecip)
+ * This file SplineStrategyT.scala is part of numrecip (numrecip)
  *
- *     numrecip / InterpolationSet.scala is free software: you can redistribute it and/or modify
+ *     numrecip / SplineStrategyT.scala is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
  *
- *     numrecip / InterpolationSet.scala is distributed in the hope that it will be useful,
+ *     numrecip / SplineStrategyT.scala is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
@@ -23,10 +23,16 @@ package com.github.fons.nr.interpolation
  * Created with IntelliJ IDEA.
  * User: fons
  * Date: 1/20/14
- * Time: 9:36 AM
+ * Time: 6:35 PM
  * To change this template use File | Settings | File Templates.
  */
 
-case class InterpolationSet(Sinterps : Option[Vector[InterpolationT]] ) {
-  def apply(indx : Int) : Option[InterpolationT] = Sinterps.map(_(indx))
+
+
+trait SplineStrategy  extends StrategyT[Double] {
+
+  //def strategy(indep: Vector[Double], data: Vector[Double]) : Option[Vector[Double]] = None
+
+  override
+  def strategyName = strategyClassName(this)
 }

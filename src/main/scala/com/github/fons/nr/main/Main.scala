@@ -20,28 +20,35 @@
 package com.github.fons.nr.main
 
 import com.github.fons.nr.examples._
+import com.github.fons.nr.ode._
+import com.github.fons.nr.interpolation._
+import com.github.fons.nr.ode.butcher.tableau._
+import scala.math._
+import scala.util.{Success, Try}
+import com.github.fons.nr.matrix.LUSolver
 
+trait Testy[U, T <: Iterable[U]] {
+  val Coffee : T
+  override
+  val toString = "testy " + Coffee
+}
 
 object Main extends App {
 
 
-  def reduce1(v: Double, x: Vector[Double], f: Vector[Double]): Vector[Double] = {
-    val l = x.zip(f)
-    val k = l.zip(l tail)
-    val newl = for (((x1, f1), (x2, f2)) <- k) yield {
-      1.0 / (x1 - x2) * ((v - x2) * f2 - (v - x1) * f1)
-    }
-    val newx = x.head +: (x.tail.tail)
 
-    newl match {
-      case Vector() => newl
-      case _ => reduce1(v, newx, newl)
-    }
-  }
-   //CubicSplineExample1.run
-   CubicSplineExample3.run
-//  val m1 = Map('a'->10, 'b' -> 20)
-//  println(m1)
-//  val m2 = m1 + ('a'->100, 'b'->67)
-//  println(m2)
+  val xvals = Vector(0.1,0.2,0.3,0.4,0.5)
+  val yvals = Vector(-1.6228,-0.8218,-0.3027,0.1048,0.4542)
+  val x = 0.15
+//  val xvals = Vector(2.0,3.0,5.0,8.0)
+//  val yvals = Vector(3.0,8.0,4.0,2.0)
+//  val x = 4.0
+
+  val inter = new {val Degree = 4} with Interpolator(DataSet(xvals, yvals)) with LagrangeNeville with BasicNevilleStrategy
+  println(inter)
+  val resx = inter(x)
+  println(resx)
+
+  //val c = new {val Coffee = List(45)} with Testy[Int, List[Int]]
+  //println(c)
 }

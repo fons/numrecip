@@ -9,7 +9,7 @@ import com.github.fons.nr.matrix.{LinearSystemsSolverT, Matrix}
  * Time: 7:25 PM
  * To change this template use File | Settings | File Templates.
  */
-trait ExtrapolatedSpline extends SplineStrategyT with LinearSystemsSolverT {
+trait ExtrapolatedSpline extends SplineStrategy with LinearSystemsSolverT {
 
   private def end_points(delta_x : Vector[Double], v : Vector[Double]) : Option[Vector[Double]] = {
     val last = v.length - 1
@@ -50,5 +50,5 @@ trait ExtrapolatedSpline extends SplineStrategyT with LinearSystemsSolverT {
 
   }
   override
-  def strategyName = className(this)  + " with solver " + solverName
+  def strategyName = strategyClassName(this)  + " with solver " + solverName
 }

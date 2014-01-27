@@ -27,15 +27,12 @@ package com.github.fons.nr.interpolation
  * To change this template use File | Settings | File Templates.
  */
 
-import scala.annotation.tailrec
 
-//TODO : have a spline strategy (for natural spline, clamped etc...
-
-trait CubicSpline extends InterpolatorT with SplineStrategyT {
+trait CubicSpline extends InterpolatorT with SplineStrategy {
 
   override
   protected
-  def className[A](a: A)(implicit m: Manifest[A]) = m.toString
+  def strategyClassName[A](a: A)(implicit m: Manifest[A]) = m.toString
 
   private
   case class Spline(from: Double, to: Double, s1: Double, s2: Double, s3: Double, y: Double) extends InterpolationT {
@@ -52,7 +49,9 @@ trait CubicSpline extends InterpolatorT with SplineStrategyT {
     lazy val delta_y = data.zip(data tail).map(xy => xy._2 - xy._1)
     lazy val rat_yx = delta_y.zip(delta_x).map((x) => x._1 / x._2)
 
+    //returns the second order derivatives
     val Mm = strategy(indep: Vector[Double], data: Vector[Double])
+
     Mm match {
       case Some(m) => Some((for (index <- Range(0, indep.length - 1)) yield {
         val s1 = rat_yx(index) - delta_x(index) * (2.0 * m(index) + m(index + 1)) / 6.0
@@ -69,6 +68,6 @@ trait CubicSpline extends InterpolatorT with SplineStrategyT {
   def initialize(dataSet: DataSet): Option[Vector[InterpolationSet]] = Some(for (y <- dataSet.dependend) yield InterpolationSet(initialize_helper(dataSet.independend, y)))
 
   override
-  def interpolatorName = className(this) + " with strategy " + strategyName
+  def interpolatorName = strategyClassName(this) + " with strategy " + strategyName
 
 }

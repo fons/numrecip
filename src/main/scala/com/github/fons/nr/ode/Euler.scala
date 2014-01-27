@@ -15,7 +15,7 @@ trait Euler extends OdeStepWithErrorEstimateT {
 
 
   override def next_with_error(Step: Double, Args: (Double, List[Double]),
-                               Func: List[(Double, Double *) => Double]): (Try[(Double, List[Double])], Option[List[Double]]) = {
+                               Func: List[(Double, Double*) => Double]): (Try[(Double, List[Double])], Option[List[Double]]) = {
 
     val res1 = next(Step, Args, Func)
     val res2 = next(Step * 0.5, Args, Func)
