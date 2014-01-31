@@ -1,14 +1,14 @@
 /*
  * Copyright (c) 2014.
  *
- * This file LagrangeNeville.scala is part of numrecip (numrecip)
+ * This file BasicNevilleStrategy.scala is part of numrecip (numrecip)
  *
- *     numrecip / LagrangeNeville.scala is free software: you can redistribute it and/or modify
+ *     numrecip / BasicNevilleStrategy.scala is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
  *
- *     numrecip / LagrangeNeville.scala is distributed in the hope that it will be useful,
+ *     numrecip / BasicNevilleStrategy.scala is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
@@ -20,16 +20,16 @@
 package com.github.fons.nr.interpolation
 
 import scala.annotation.tailrec
+import scala.None
 
 /**
  * Created with IntelliJ IDEA.
  * User: fons
- * Date: 1/25/14
- * Time: 6:36 PM
+ * Date: 1/27/14
+ * Time: 1:22 PM
  * To change this template use File | Settings | File Templates.
  */
-trait LagrangeNeville extends InterpolatorT with StrategyT[(Int,Int, Int)] with Degree {
-
+trait LagrangeNevilleStrategy extends StrategyT[InterpolationT] with Degree {
 
   private
   case class LagrangeNevilleInterpolation(from: Double, to: Double, xvals:Vector[Double], yvals:Vector[Double]) extends InterpolationT {
@@ -59,19 +59,28 @@ trait LagrangeNeville extends InterpolatorT with StrategyT[(Int,Int, Int)] with 
     }
   }
 
-  private
-  def initialize_helper(indep: Vector[Double], data: Vector[Double]): Option[Vector[InterpolationT]] = {
-    //TODO : scanning the data TWICE; first for the strategy; then to construct the interploators
-    strategy(indep, data) match {
-      case None => None
-      case Some(vect) => Some(for ((index, from,to) <- vect) yield LagrangeNevilleInterpolation(indep(index), indep(index + 1),
-                                                                   indep.slice(from, to+1),  data.slice(from, to+1)))
-      }
-    }
-  override
-  protected
-  def initialize(dataSet: DataSet): Option[Vector[InterpolationSet]] = Some(for (y <- dataSet.dependend) yield InterpolationSet(initialize_helper(dataSet.independend, y)))
+  override def strategy(indep: Vector[Double], data: Vector[Double]): Option[Vector[InterpolationT]] = {
+
+    val number_of_data_points = if (indep.length > Degree) Degree + 1 else indep.length
+    val lower_half =  (number_of_data_points - 1)/2
+    val upper_half =  number_of_data_points - lower_half - 1
+
+    val v = (for (index <- Range(0, data.length-1)) yield {
+
+      val l1   = index - lower_half
+      val fromt = if (l1 < 0) 0 else l1
+      val off1 = if (l1 < 0) -l1 else 0
+
+      val h1    = index + upper_half + off1
+      val to    = if (h1 < data.length) h1 else (data.length - 1)
+      val off2  = if (h1 < data.length) 0 else (h1 - (data.length - 1))
+      val from  = if ((fromt - off2) > 0) (fromt - off2) else 0
+
+      LagrangeNevilleInterpolation(indep(index), indep(index + 1), indep.slice(from, to+1),  data.slice(from, to+1))
+    } ).toVector
+    Some(v)
+  }
 
   override
-  def interpolatorName: String = strategyClassName(this) + " using strategy : " + strategyName + " with Degree " + Degree
+  def strategyName = strategyClassName(this)
 }

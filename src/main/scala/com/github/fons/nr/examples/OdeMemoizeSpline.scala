@@ -41,8 +41,7 @@ object OdeMemoizeSpline {
 
              val step = 0.01
              val init = (1.0, List(1.0,0.0))
-             //val func = List(f,g)
-             val ode = new OdeSolver(step, init, List(f, g)) with ExplicitRungeKutta with RKE56Tableau with Memoize
+             val ode = new OdeSolver(step, init, List(f,g)) with ExplicitRungeKutta with RKE56Tableau with Memoize
 
              val result = ode(1.25)
              result match {

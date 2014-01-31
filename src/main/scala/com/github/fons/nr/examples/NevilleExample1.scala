@@ -19,7 +19,7 @@
 
 package com.github.fons.nr.examples
 
-import com.github.fons.nr.interpolation.{BasicNevilleStrategy, LagrangeNeville, DataSet, Interpolator}
+import com.github.fons.nr.interpolation.{LagrangeNevilleStrategy, PolynomialApproximation, DataSet, Interpolator}
 
 /**
  * Created with IntelliJ IDEA.
@@ -39,7 +39,7 @@ object NevilleExample1 {
     //  val x = 4.0
     val results = Map((0 -> -1.6228), (1 -> -1.22230), (2 -> -1.18706), (3 -> -1.17642), (4 -> -1.17186), (5 -> -1.17186))
     for (degree <- Range(0,6)) {
-      val inter = new {val Degree = degree} with Interpolator(DataSet(xvals, yvals)) with LagrangeNeville with BasicNevilleStrategy
+      val inter = new {val Degree = degree} with Interpolator(DataSet(xvals, yvals)) with PolynomialApproximation with LagrangeNevilleStrategy
       println(inter)
       val resx = inter(x)
       println("degree : " + degree + " x : " + x + "result : " + resx + " actual : " + results(degree))
