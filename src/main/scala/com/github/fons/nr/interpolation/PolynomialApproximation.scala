@@ -38,5 +38,5 @@ trait PolynomialApproximation extends InterpolatorT with StrategyT[Interpolation
   def initialize(dataSet: DataSet): Option[Vector[InterpolationSet]] = Some(for (y <- dataSet.dependend) yield InterpolationSet(initialize_helper(dataSet.independend, y)))
 
   override
-  def interpolatorName: String = strategyClassName(this) + " using strategy : " + strategyName + " with Degree " + Degree
+  def interpolatorName: String = strategyClassName(this) + " using strategy : " + strategyName + " with Degree " + degree
 }

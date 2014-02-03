@@ -61,7 +61,7 @@ trait LagrangeNevilleStrategy extends StrategyT[InterpolationT] with Degree {
 
   override def strategy(indep: Vector[Double], data: Vector[Double]): Option[Vector[InterpolationT]] = {
 
-    val number_of_data_points = if (indep.length > Degree) Degree + 1 else indep.length
+    val number_of_data_points = if (indep.length > degree) degree + 1 else indep.length
     val lower_half =  (number_of_data_points - 1)/2
     val upper_half =  number_of_data_points - lower_half - 1
 

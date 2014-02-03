@@ -24,7 +24,8 @@ import com.github.fons.nr.examples._
 
 
 object Main extends App {
+ //BulirschStoerExample1.run()
  BulirschStoerExample2.run
 
- OdeMemoizeBurlischStoer.run()
+ //OdeMemoizeBurlischStoer.run()
 }

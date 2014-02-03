@@ -20,6 +20,7 @@
 package com.github.fons.nr.examples
 
 import com.github.fons.nr.interpolation.{BulirschStoerNevilleStrategy, PolynomialApproximation, DataSet, Interpolator}
+import com.github.fons.nr.util.Accuracy
 
 /**
  * Created with IntelliJ IDEA.
@@ -33,11 +34,12 @@ object BulirschStoerExample1 {
         val xvals = Vector(2.0,3.0,5.0,8.0)
         val yvals = Vector(3.0,8.0,4.0,2.0)
 
-        val degree = 3
+        val degr = 3
         val x = 4
-        val inter = new {val Degree = degree} with Interpolator(DataSet(xvals, yvals)) with PolynomialApproximation with BulirschStoerNevilleStrategy
+        val inter = new {val degree   = degr
+                         val accuracy = Accuracy() } with Interpolator(DataSet(xvals, yvals)) with PolynomialApproximation with BulirschStoerNevilleStrategy
         println(inter)
         val resx = inter(x)
-        println("degree : " + degree + "  input : " + x + " result : " + resx)
+        println("degree : " + degr + "  input : " + x + " result : " + resx)
       }
 }

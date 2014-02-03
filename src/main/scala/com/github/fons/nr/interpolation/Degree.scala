@@ -27,6 +27,6 @@ package com.github.fons.nr.interpolation
  * To change this template use File | Settings | File Templates.
  */
 trait Degree {
-  val Degree : Int
+  val degree : Int
 
 }

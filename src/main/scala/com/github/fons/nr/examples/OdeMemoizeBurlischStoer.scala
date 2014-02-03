@@ -22,12 +22,10 @@ package com.github.fons.nr.examples
 import scala.math._
 import com.github.fons.nr.ode.{Memoize, ExplicitRungeKutta, OdeSolver}
 import com.github.fons.nr.ode.butcher.tableau.RKE56Tableau
-import scala.util.Success
 import com.github.fons.nr.interpolation._
-import com.github.fons.nr.matrix.LUSolver
-import scala.util.Success
 import scala.util.Success
 import com.github.fons.nr.interpolation.Interpolator
+import com.github.fons.nr.util.Accuracy
 
 /**
  * Created with IntelliJ IDEA.
@@ -49,17 +47,20 @@ object OdeMemoizeBurlischStoer {
         val step = 0.01
         val init = (0.0, List(1.0,0.0))
         val ode = new OdeSolver(step, init, List(f,g)) with ExplicitRungeKutta with RKE56Tableau with Memoize
-        val degree = 10
+        val degr = 4
         val result = ode(1.25)
         result match {
           case Success(((tn, results), mem)) => {
             val ds = DataSet(mem.toList)
             ds.pp
             //println(ds)
-            val cs = new {val Degree = degree} with Interpolator(ds) with  PolynomialApproximation with BulirschStoerNevilleStrategy
-            val x = 1.04
+            val cs = new {
+              val degree = degr
+              val accuracy = Accuracy()
+            } with Interpolator(ds) with  PolynomialApproximation with BulirschStoerNevilleStrategy
+            val x = 1.045
             val i = cs(x)
-            println("degree : " + degree + " independent variable : " + x  + " interpolation result : " + i)
+            println("degree : " + degr + " independent variable : " + x  + " interpolation result : " + i)
             println("exact result : " + fx(x) + " and " + gx(x))
           }
           case _ => println("error")

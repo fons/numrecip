@@ -38,11 +38,11 @@ object NevilleExample1 {
     //  val yvals = Vector(3.0,8.0,4.0,2.0)
     //  val x = 4.0
     val results = Map((0 -> -1.6228), (1 -> -1.22230), (2 -> -1.18706), (3 -> -1.17642), (4 -> -1.17186), (5 -> -1.17186))
-    for (degree <- Range(0,6)) {
-      val inter = new {val Degree = degree} with Interpolator(DataSet(xvals, yvals)) with PolynomialApproximation with LagrangeNevilleStrategy
+    for (degr <- Range(0,6)) {
+      val inter = new {val degree = degr} with Interpolator(DataSet(xvals, yvals)) with PolynomialApproximation with LagrangeNevilleStrategy
       println(inter)
       val resx = inter(x)
-      println("degree : " + degree + " x : " + x + "result : " + resx + " actual : " + results(degree))
+      println("degree : " + degr + " x : " + x + "result : " + resx + " actual : " + results(degr))
     }
   }
 }

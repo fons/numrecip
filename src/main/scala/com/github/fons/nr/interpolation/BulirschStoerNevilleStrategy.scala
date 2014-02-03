@@ -21,6 +21,7 @@ package com.github.fons.nr.interpolation
 
 import scala.annotation.tailrec
 import scala.collection.immutable.TreeSet
+import com.github.fons.nr.util.{Accuracy, overflowOption}
 
 /**
  * Created with IntelliJ IDEA.
@@ -30,7 +31,8 @@ import scala.collection.immutable.TreeSet
  * To change this template use File | Settings | File Templates.
  */
 
-trait BulirschStoerNevilleStrategy extends StrategyT[InterpolationT] with Degree {
+trait BulirschStoerNevilleStrategy extends StrategyT[InterpolationT] with Degree  {
+  val accuracy : Accuracy
 
   private
   case class BulirschStoerNevilleInterpolation(from: Double, to: Double, xvals: Vector[Double], yvals: Vector[Double]) extends InterpolationT {
@@ -54,13 +56,20 @@ trait BulirschStoerNevilleStrategy extends StrategyT[InterpolationT] with Degree
     @tailrec
     private
     def bulirschstoer(xvalue: Double, xvals: Vector[Double], yvals: Map[TreeSet[Int], Double], paths: List[List[TreeSet[Int]]]): Option[Double] = {
+      //println("-----"*10)
+      //println(xvals)
       val path = paths.head
       val v = for (current_index <- path) yield {
+        //println("{" + current_index + "}")
+        //val dh = xvalue - xvals(current_index.head)
+        //val dn = xvalue - xvals(current_index.last)
         val fd = (xvalue - xvals(current_index.head)) / (xvalue - xvals(current_index.last))
+        //print("->", xvalue, xvals(current_index.head), xvals(current_index.last))
+        //println(" == > ", dh,dn,fd)
         //split key (1,2,3,4) to  (1,2,3) and (2,3,4) which are the previous iterants
         val lower = current_index.init
         val higher = current_index.tail
-        //TODO : should match on Set ?
+
         val lb = higher.toList match {
           case List(_i_) => higher ++ Set(_i_ - 1)
           case _ => higher.init ++ Set(higher.last - 1)
@@ -70,24 +79,35 @@ trait BulirschStoerNevilleStrategy extends StrategyT[InterpolationT] with Degree
         val diff2 = yvals(higher) - lbv
         val denom = fd * (1.0 - diff / diff2) - 1
         val result = yvals(higher) + diff / denom
+        //println(yvals(higher), diff, denom, result)
         (current_index -> result)
       }
 
       paths match {
         case List(el) => v match {
-          case List((k, v)) => Some(v)
+          case List((k, v)) => overflowOption(v)
           case _ => None
         }
         case _ => bulirschstoer(xvalue, xvals, yvals ++ v, paths.tail)
       }
     }
 
+
+
+
+    private
+    def close_to_node(x: Double, xvals :Vector[Double], yvals: Vector[Double]):Option[Double] =  {
+        val index = xvals.indexWhere((c)=>accuracy(x-c))
+        if (index < 0) None else Some(yvals(index))
+    }
+
     /////////////////////////////////////////////////
     def apply(x: Double): Option[Double] = {
       if (x < from || x > to) None
-      else (xvals, yvals) match {
-        case (Vector(x), Vector(y)) => Some(y)
-        case _ => bulirschstoer(x, xvals, sy, paths_p)
+      else (xvals, yvals, close_to_node(x, xvals, yvals)) match {
+        case (Vector(x), Vector(y), _) => Some(y)
+        case (_,_,Some(y))             => Some(y)
+        case _                         => bulirschstoer(x, xvals, sy, paths_p)
       }
     }
   }
@@ -96,7 +116,7 @@ trait BulirschStoerNevilleStrategy extends StrategyT[InterpolationT] with Degree
   override
   def strategy(indep: Vector[Double], data: Vector[Double]): Option[Vector[InterpolationT]] = {
 
-    val number_of_data_points = if (indep.length > Degree) Degree + 1 else indep.length
+    val number_of_data_points = if (indep.length > degree) degree + 1 else indep.length
     val lower_half =  (number_of_data_points - 1)/2
     val upper_half =  number_of_data_points - lower_half - 1
 
