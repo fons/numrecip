@@ -27,17 +27,23 @@ package com.github.fons.nr.interpolation
  * To change this template use File | Settings | File Templates.
  */
 object DataSet {
-  def apply(xvals : Vector[Double], yvals : Vector[Double]) = new DataSet(xvals, yvals)
-  def apply(vals : Seq[(Double, Seq[Double])])  = {
-      def collect(l:Vector[Vector[Double]], b:Vector[Double]) = {
-        l.zip(b).map((lx)=>lx._1 :+ lx._2)
-      }
-      val xargs =  vals.map(_._1).toVector
-      val step1 =  vals.map(_._2.toVector)
-      val init  = step1.head.map(Vector(_))
-      val rem   = step1.tail
+  def apply(xvals: Vector[Double], yvals: Vector[Double]) = new DataSet(xvals, yvals)
+
+  def apply(vals: Seq[(Double, Seq[Double])]) = {
+
+    def collect(l: Vector[Vector[Double]], b: Vector[Double]) = {
+      l.zip(b).map((lx) => lx._1 :+ lx._2)
+    }
+
+    if (vals.length > 0) {
+      val xargs = vals.map(_._1).toVector
+      val step1 = vals.map(_._2.toVector)
+      val init = step1.head.map(Vector(_))
+      val rem = step1.tail
       val yargs = rem.foldLeft(init)(collect)
       new DataSet((xargs, yargs))
+    }
+    else new DataSet(Vector[Double](), Vector[Double]())
   }
 }
 
@@ -72,4 +78,7 @@ case class DataSet(dataSet : (Vector[Double], Vector[Vector[Double]])) {
       println("")
     }
   }
+
+  override
+  def toString = "DataSet@" + hashCode() + " : [ number of values : " + independend.length +  "]"
 }

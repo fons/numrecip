@@ -51,19 +51,20 @@ object OdeExample1 {
         **/
 
         val ode : Try[OdeSolverT] = Factory(Solver.RKE56, 0.2, (0.0, List(1.0, 0.0)), List(f, g), 0.00001)
-        ode match {
-          case Success(ode) => {
-            ode(0.15) match {
-              case Success(((tn,results:List[Double]), _)) => {
-                println("method : " + Solver.RKE56 + " for " + tn)
-                println("returned : " + results(0) + ", " + results(1))
-                println("exact    : " + fx(tn) + ", " + gx(tn))
-              }
-              case _ => println("failed")
-            }
-          }
-          case _ => println("failed")
-        }
+        ode.flatMap(_(0.15)).map(println(_))
+//        ode match {
+//          case Success(ode) => {
+//            ode(0.15) match {
+//              case Success(((tn,results:List[Double]), _)) => {
+//                println("method : " + Solver.RKE56 + " for " + tn)
+//                println("returned : " + results(0) + ", " + results(1))
+//                println("exact    : " + fx(tn) + ", " + gx(tn))
+//              }
+//              case _ => println("failed")
+//            }
+//          }
+//          case _ => println("failed")
+//        }
 
       }
 }

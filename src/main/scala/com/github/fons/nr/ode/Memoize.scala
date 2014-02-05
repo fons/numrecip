@@ -36,5 +36,5 @@ trait Memoize extends MemoizeT {
 
   override
   lazy
-  val toString = "com.mhsw.com.github.fons.nr.ode.Memoize@" + hashCode().toString + "@entries:" + (list length).toString
+  val memoizeString = "com.mhsw.com.github.fons.nr.ode.Memoize@" + hashCode().toString + "@entries:" + (list length).toString
 }

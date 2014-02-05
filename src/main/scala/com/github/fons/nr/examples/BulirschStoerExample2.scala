@@ -44,8 +44,5 @@ object BulirschStoerExample2 {
          println(inter)
          val resx = inter(x)
          println("degree : " + degr + "  input : " + x + " result : " + resx + " exact : " + f(x))
-
-
-
        }
 }

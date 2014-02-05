@@ -30,7 +30,7 @@ package com.github.fons.nr.examples
 import scala.math._
 import scala.util.{Success, Try}
 
-import com.github.fons.nr.ode.{Solver, OdeSolverT, Factory}
+import com.github.fons.nr.ode.{Solver, OdeSolverT, Factory, OdeResult}
 
 object OdeExample2 {
   def run {
@@ -54,15 +54,15 @@ object OdeExample2 {
     ode match {
       case Success(ode) => {
         ode(0.15) match {
-          case Success(((tn,results:List[Double]), _)) => {
-            println("method : " + Solver.EU + " for " + tn)
-            println("returned : " + results(0) + ", " + results(1))
-            println("exact    : " + fx(tn) + ", " + gx(tn))
+          case Success(result) => {
+            println("method : " + Solver.EU + " for " + result.first + " to " + result.last)
+            println("returned : " + result.tail(0) + ", " + result.tail(1))
+            println("exact    : " + fx(result.last) + ", " + gx(result.last))
           }
-          case _ => println("failed")
+          case _ => println("solver failed")
         }
       }
-      case _ => println("failed")
+      case _ => println("failed to a ode engine")
     }
 
   }

@@ -20,7 +20,7 @@
 package com.github.fons.nr.examples
 
 import scala.math._
-import com.github.fons.nr.ode.{Memoize, ExplicitRungeKutta, OdeSolver}
+import com.github.fons.nr.ode.{Memoize, ExplicitRungeKutta, OdeSolver, OdeResult}
 import com.github.fons.nr.ode.butcher.tableau.RKE56Tableau
 import scala.util.Success
 import com.github.fons.nr.interpolation.{NormalSpline, CubicSpline, Interpolator, DataSet}
@@ -45,11 +45,9 @@ object OdeMemoizeSpline {
 
              val result = ode(1.25)
              result match {
-               case Success(((tn, results), mem)) => {
-                 val ds = DataSet(mem.toList)
-                 ds.pp
-                 //println(ds)
-                 val cs = new Interpolator(ds) with CubicSpline with NormalSpline with LUSolver
+               case Success(_result_) => {
+
+                 val cs = new OdeResult(_result_) with CubicSpline with NormalSpline with LUSolver
                  val i = cs(1.134)
                  println(i)
                }

@@ -35,4 +35,8 @@ trait MemoizeT {
   }
 
   def toList = list.toList
+
+
+  lazy
+  val memoizeString = "com.mhsw.com.github.fons.nr.ode.MemoizeT@" + hashCode().toString + "@entries:" + (list length).toString
 }
