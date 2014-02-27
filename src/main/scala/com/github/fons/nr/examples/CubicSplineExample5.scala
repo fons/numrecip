@@ -27,7 +27,7 @@ object CubicSplineExample5 {
     println(vs)
     println(cs)
     println("result  x= 2.1 : ")
-    cs(2.1).map(_.map(_.map(println _)))
+    cs(2.1).flatMap(_()).map(println _)
     println("exaxt :" , S2(2.1))
     println("======================================")
   }

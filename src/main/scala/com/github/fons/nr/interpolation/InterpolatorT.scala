@@ -49,17 +49,17 @@ trait InterpolatorT {
     }
   }
 
-  protected
+  private
   val Sinterpolators: Option[Vector[InterpolationSet]] = initialize(dataSet)
 
   protected def className[A](a: A)(implicit m: Manifest[A]) = m.toString
 
   protected def initialize (dataSet: DataSet): Option[Vector[InterpolationSet]] = None
 
-  def interpolate(x: Double): Option[Vector[Option[Double]]] = {
+  def interpolate(x: Double): Option[InterpolationResult] = {
     val Iidx = find_close(dataSet.independend.length, x, dataSet.independend, (0, dataSet.independend.length-1))
     (Iidx, Sinterpolators) match {
-      case (Some(idx), Some(inter_list)) => Some(for (inter <- inter_list) yield inter(idx).flatMap(_(x)))
+      case (Some(idx), Some(inter_list)) => Some(InterpolationResult(x , for (inter <- inter_list) yield inter(idx).flatMap(_(x)),this.toString))
       case _ => None
     }
   }

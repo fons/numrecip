@@ -34,13 +34,56 @@ import com.github.fons.nr.util.Accuracy
 import com.github.fons.nr.interpolation.Interpolator
 import scala.Some
 import com.github.fons.nr.matrix.LUSolver
+import scala.annotation.tailrec
+import com.github.fons.nr.diff.DiffFunc
+
+object Polynomial {
+
+  def apply(coeffs : Map[Int,Double]):Polynomial  = {
+     Polynomial(coeffs, (x:Double)=>x)
+    }
+
+  def apply(coeffs : Map[Int,Double], f:(Double)=>Double)  = {
+    val maxkey = coeffs.keys.max
+    val list = (for (index <- Range(0, maxkey+1)) yield {
+      coeffs.get(index) match {
+        case None => 0
+        case Some(c) => c
+      }
+    }).toList.reverse
+    new Polynomial(list, f)
+  }
+
+}
 
 
+case class Polynomial(coeff:List[Double], f : (Double)=>Double=(x:Double)=>x) {
+
+  private def horner(x: Double, coeff:List[Double], accum:Double):Double = {
+    coeff match {
+      case List() => accum
+      case c::cs  => horner(x, cs, (accum * f(x) + c))
+    }
+  }
+
+  def apply(x : Double) : Option[Double]= {
+    coeff match {
+      case List()  => None
+      case List(c) => Some(c)
+      case c::cs   => Some(horner(x, cs, c))
+    }
+  }
+}
 object Main extends App {
-  //BulirschStoerExample1.run()
-  //BulirschStoerExample2.run
-//OdeExample1.run
-  //OdeMemoizeBurlischStoer.run()
-  //NevilleExample1.run
-  OdeMemoizeExample.run
+  val cp = Polynomial(List(1.0, 1.0, 1.0, 1.0))
+  val r = cp(2)
+  println("r => ", r)
+
+  val cp1 = Polynomial(List(1.0, 1.0, 1.0, 1.0), (x:Double)=>x-2.5)
+  val r1 = cp1(2)
+  println("r1 => ", r1)
+
+  val cp2 = Polynomial(Map((0->0.0), (4->1.0)), (x:Double)=>x)
+  val r2 = cp2(2)
+  println("r2 => ", r2)
 }

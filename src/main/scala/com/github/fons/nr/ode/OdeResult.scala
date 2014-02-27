@@ -52,11 +52,7 @@ case class OdeResult(init : (Double, List[Double]), end : (Double, List[Double])
     v match  {
       case init._1  => Some(head)
       case end._1   => Some(tail)
-      case _ => interpolate(v) match {
-        case None           => None
-        case Some(Vector()) => None
-        case Some(_vV_)     => _vV_.reverse.foldLeft(Option(List[Double]()))(collect)
-      }
+      case _        => interpolate(v).flatMap(_())
     }
   }
   override
