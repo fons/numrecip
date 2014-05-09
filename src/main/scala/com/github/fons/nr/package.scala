@@ -19,6 +19,8 @@
 
 package com.github.fons.nr
 
+import scala.annotation.tailrec
+
 /**
  * Created with IntelliJ IDEA.
  * User: fons
@@ -29,6 +31,31 @@ package com.github.fons.nr
 package object util {
 
 
+  def toPartialFunction(interval: Interval, func: (Double) => Double): (Double) => Option[Double] = {
+    (x: Double) => {
+      if (interval.inin(x)) Some(func(x)) else None
+    }
+  }
+
+
+  def liftedSum(x: Option[Double], y: Option[Double]): Option[Double] = LiftedOperation((v1: Double, v2: Double) => v1 + v2)(x, y)
+
+  def liftedSub(x: Option[Double], y: Option[Double]): Option[Double] = LiftedOperation((v1: Double, v2: Double) => v1 - v2)(x, y)
+
+  def liftedProd(x: Option[Double], y: Option[Double]): Option[Double] = LiftedOperation((v1: Double, v2: Double) => v1 * v2)(x, y)
+
+  def liftedDiv(x: Option[Double], y: Option[Double]): Option[Double] = LiftedOperation((v1: Double, v2: Double) => v1 / v2)(x, y)
+
+  @tailrec
+  def listToOption(l: List[Option[Double]], accum: Option[List[Double]] = Some(List())): Option[List[Double]] = {
+    (l, accum) match {
+      case (_, None) => None
+      case (List(), _) => accum.map(_.reverse)
+      case (Some(v1) :: vs, Some(acc)) => listToOption(vs, Some(v1 :: acc))
+      case (None :: vs, _) => None
+    }
+  }
+
   def overflowthrow(v: Double) = {
     v match {
       case Double.PositiveInfinity => throw new ArithmeticException("positive overflow")
@@ -38,7 +65,7 @@ package object util {
     }
   }
 
-  def overflowOption(v:Double) : Option[Double] = {
+  def overflowOption(v: Double): Option[Double] = {
     v match {
       case Double.PositiveInfinity => None
       case Double.NegativeInfinity => None

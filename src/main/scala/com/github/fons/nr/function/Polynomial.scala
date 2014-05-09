@@ -17,7 +17,7 @@
  *     along with numrecip.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.fons.nr.func
+package com.github.fons.nr.function
 
 import scala.annotation.tailrec
 import com.github.fons.nr.diff.DiffFunc

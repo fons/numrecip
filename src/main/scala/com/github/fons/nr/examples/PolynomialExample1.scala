@@ -9,7 +9,7 @@ package com.github.fons.nr.examples
  */
 
 
-import com.github.fons.nr.func.Polynomial
+import com.github.fons.nr.function.Polynomial
 
 object PolynomialExample1 {
   def run {

@@ -19,7 +19,7 @@
 
 package com.github.fons.nr.examples
 
-import com.github.fons.nr.func.PowerSeries
+import com.github.fons.nr.function.PowerSeries
 
 /**
  * Created with IntelliJ IDEA.
