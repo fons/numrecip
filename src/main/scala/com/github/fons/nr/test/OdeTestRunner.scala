@@ -1,6 +1,6 @@
 package com.github.fons.nr.test
 
-//package mohegan.numerics
+//function mohegan.numerics
 
 import scala.math._
 

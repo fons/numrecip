@@ -28,7 +28,7 @@ import com.github.fons.nr.matrix.{Matrix, LinearSystemsSolverT}
  * Time: 1:32 PM
  * To change this template use File | Settings | File Templates.
  */
-trait ClampedSpline extends SplineStrategyT with LinearSystemsSolverT {
+trait ClampedSpline extends SplineStrategy with LinearSystemsSolverT {
 
     val derivs : FirstOrderDerivs
 
@@ -78,5 +78,5 @@ trait ClampedSpline extends SplineStrategyT with LinearSystemsSolverT {
     }
 
   override
-  def strategyName = className(this) + " with solver " + solverName
+  def strategyName = strategyClassName(this) + " with solver " + solverName
 }

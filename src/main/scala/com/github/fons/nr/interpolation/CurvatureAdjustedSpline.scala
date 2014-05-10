@@ -9,7 +9,7 @@ import com.github.fons.nr.matrix.{LinearSystemsSolverT, Matrix}
  * Time: 5:11 PM
  * To change this template use File | Settings | File Templates.
  */
-trait CurvatureAdjustedSpline extends SplineStrategyT with LinearSystemsSolverT {
+trait CurvatureAdjustedSpline extends SplineStrategy with LinearSystemsSolverT {
 
   val derivs : SecondOrderDerivs
 
@@ -59,12 +59,10 @@ trait CurvatureAdjustedSpline extends SplineStrategyT with LinearSystemsSolverT 
 
     val nmain = main + ((0,0)->n00, (0,1)->n01, (dim-1, dim-2)->n2N, (dim-1,dim-1)->n1N)
     val M     = new Matrix(nmain, dim, dim)
-    M.pp
-    C.pp
     apply(M, C).map(_.values((x, y) => true)).flatMap(end_points(rat_yx, delta_x, _))
 
   }
 
   override
-  def strategyName = className(this) + " with solver " + solverName
+  def strategyName = strategyClassName(this) + " with solver " + solverName
 }

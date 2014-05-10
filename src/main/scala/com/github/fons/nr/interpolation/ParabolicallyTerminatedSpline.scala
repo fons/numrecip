@@ -29,7 +29,7 @@ import com.github.fons.nr.matrix.{LinearSystemsSolverT, Matrix}
  * To change this template use File | Settings | File Templates.
  */
 
-trait ParabolicallyTerminatedSpline extends SplineStrategyT with LinearSystemsSolverT {
+trait ParabolicallyTerminatedSpline extends SplineStrategy with LinearSystemsSolverT {
 
   private
   def end_points(v : Vector[Double]) : Option[Vector[Double]] = Some(v.head +: v :+ v.last)
@@ -67,5 +67,5 @@ trait ParabolicallyTerminatedSpline extends SplineStrategyT with LinearSystemsSo
 
   }
   override
-  def strategyName = className(this)  + " with solver " + solverName
+  def strategyName = strategyClassName(this)  + " with solver " + solverName
 }

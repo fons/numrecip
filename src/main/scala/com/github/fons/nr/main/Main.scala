@@ -19,29 +19,23 @@
 
 package com.github.fons.nr.main
 
-import com.github.fons.nr.examples._
+
+import com.github.fons.nr.function.approximation._
+
+
+case class IfThen(state: Boolean) {
+
+}
 
 
 object Main extends App {
 
 
-  def reduce1(v: Double, x: Vector[Double], f: Vector[Double]): Vector[Double] = {
-    val l = x.zip(f)
-    val k = l.zip(l tail)
-    val newl = for (((x1, f1), (x2, f2)) <- k) yield {
-      1.0 / (x1 - x2) * ((v - x2) * f2 - (v - x1) * f1)
-    }
-    val newx = x.head +: (x.tail.tail)
 
-    newl match {
-      case Vector() => newl
-      case _ => reduce1(v, newx, newl)
-    }
+  def convert[A <: EvalStrategyT, B >: EvalStrategyT](a: A): B = {
+    a
   }
-   //CubicSplineExample1.run
-   CubicSplineExample3.run
-//  val m1 = Map('a'->10, 'b' -> 20)
-//  println(m1)
-//  val m2 = m1 + ('a'->100, 'b'->67)
-//  println(m2)
+
+
 }
+

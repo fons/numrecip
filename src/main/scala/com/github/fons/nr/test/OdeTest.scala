@@ -61,7 +61,7 @@ class OdeTest private(Exact: List[(Double) => Double]) {
       case Some(odesolver) => {
         val reslt = odesolver(target)
         reslt match {
-          case Success((res, _)) => Success(OdeTestResult(type_name + ":" + solver.toString, comp(res, exact(target))))
+          case Success(odeResult) => Success(OdeTestResult(type_name + ":" + solver.toString, comp(odeResult.end, exact(target))))
           case Failure(f) => Failure(f)
         }
       }

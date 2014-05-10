@@ -26,6 +26,7 @@ package com.github.fons.nr.interpolation
  * Time: 9:36 AM
  * To change this template use File | Settings | File Templates.
  */
+
 case class InterpolationSet(Sinterps : Option[Vector[InterpolationT]] ) {
   def apply(indx : Int) : Option[InterpolationT] = Sinterps.map(_(indx))
 }

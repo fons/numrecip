@@ -27,41 +27,9 @@ package com.github.fons.nr.interpolation
  * To change this template use File | Settings | File Templates.
  */
 
-//TODO : add more constructors to make instantiation easier..
 
-//TODO : Interpolator uses InterpolationsT !!
-
-import scala.annotation.tailrec
-import com.github.fons.nr.matrix.{Matrix, LinearSystemsSolverT}
-
-case class Interpolator(dataSet: DataSet) extends InterpolatorT  {
-
-
-  @tailrec
-  private
-  def find_close(guard: Int, v: Double, l: Vector[Double], probe: (Int, Int)): Option[Int] = {
-    val (from, to) = probe
-    (((to + from) / 2), guard) match {
-      case (_, n) if n < 1 => None
-      case (mid, _) if (((mid == to) || (mid == from)) && ((to - from) == 1)) => Some(from)
-      case (mid, _) if v > l(mid) => find_close(guard - 1, v, l, (mid, to))
-      case (mid, _) if v < l(mid) => find_close(guard - 1, v, l, (from, mid))
-      case (mid, _) if guard < 1 => None
-    }
-  }
-
-  private
-  val Sinterpolators: Option[Vector[InterpolationSet]] = initialize(dataSet)
-
-  override
-  def apply(x: Double): Option[Vector[Option[Double]]] = {
-    val Iidx = find_close(dataSet.independend.length, x, dataSet.independend, (0, dataSet.independend.length-1))
-    (Iidx, Sinterpolators) match {
-      case (Some(idx), Some(inter_list)) => Some(for (inter <- inter_list) yield inter(idx).flatMap(_(x)))
-      case _ => None
-    }
-  }
-
+case class Interpolator(override val dataSet: DataSet) extends InterpolatorT  {
+  def apply(x: Double): Option[InterpolationResult] = interpolate(x)
   override def toString: String = className(this) + " interpolator : " + interpolatorName
 }
 

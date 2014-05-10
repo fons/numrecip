@@ -19,6 +19,8 @@
 
 package com.github.fons.nr.interpolation
 
+import scala.annotation.tailrec
+
 /**
  * Created with IntelliJ IDEA.
  * User: fons
@@ -30,10 +32,37 @@ package com.github.fons.nr.interpolation
 //TODO : data set type
 
 trait InterpolatorT {
+
+  protected
+  val dataSet: DataSet
+
+  @tailrec
+  private
+  def find_close(guard: Int, v: Double, l: Vector[Double], probe: (Int, Int)): Option[Int] = {
+    val (from, to) = probe
+    (((to + from) / 2), guard) match {
+      case (_, n) if n < 1 => None
+      case (mid, _) if (((mid == to) || (mid == from)) && ((to - from) == 1)) => Some(from)
+      case (mid, _) if v > l(mid) => find_close(guard - 1, v, l, (mid, to))
+      case (mid, _) if v < l(mid) => find_close(guard - 1, v, l, (from, mid))
+      case (mid, _) if guard < 1 => None
+    }
+  }
+
+  private
+  val Sinterpolators: Option[Vector[InterpolationSet]] = initialize(dataSet)
+
   protected def className[A](a: A)(implicit m: Manifest[A]) = m.toString
 
   protected def initialize (dataSet: DataSet): Option[Vector[InterpolationSet]] = None
-  def apply(x: Double): Option[Vector[Option[Double]]]  = None
+
+  def interpolate(x: Double): Option[InterpolationResult] = {
+    val Iidx = find_close(dataSet.independend.length, x, dataSet.independend, (0, dataSet.independend.length-1))
+    (Iidx, Sinterpolators) match {
+      case (Some(idx), Some(inter_list)) => Some(InterpolationResult(x , for (inter <- inter_list) yield inter(idx).flatMap(_(x)),this.toString))
+      case _ => None
+    }
+  }
 
   def interpolatorName = className(this)
 }

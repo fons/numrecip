@@ -1,6 +1,7 @@
 package com.github.fons.nr.ode
 
 import scala.annotation.tailrec
+import com.github.fons.nr.interpolation.DataSet
 
 /**
  * Created with IntelliJ IDEA.
@@ -76,9 +77,9 @@ class AdaptiveStepOdeSolver(val step: Double, val init: (Double, List[Double]), 
   }
 
 
-  def apply(t: Double): Try[((Double, List[Double]), MemoizeT)] = {
+  def apply(t: Double): Try[OdeResult] = {
     if (t == init._1) {
-      Success(init, store(init))
+      Success(OdeResult(init, init, DataSet(store(init).toList), this.toString))
     }
     else {
       val span = (t - init._1);
@@ -86,7 +87,7 @@ class AdaptiveStepOdeSolver(val step: Double, val init: (Double, List[Double]), 
       val fstep = (span / (1.0 * n))
       //println("revised step ", fstep)
       run(t, 0, fstep, init, store(init)) match {
-        case (Success(res), m) => Success((res, m))
+        case (Success(res), m) => Success(OdeResult(init,res, DataSet(m.toList), this.toString))
         case (Failure(e), m) => Failure(e)
       }
     }
