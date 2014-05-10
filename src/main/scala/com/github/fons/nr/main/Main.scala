@@ -30,6 +30,8 @@ case class IfThen(state: Boolean) {
 
 object Main extends App {
 
+
+
   def convert[A <: EvalStrategyT, B >: EvalStrategyT](a: A): B = {
     a
   }
