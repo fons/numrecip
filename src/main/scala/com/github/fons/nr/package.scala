@@ -37,6 +37,23 @@ package object util {
     }
   }
 
+  def toWholeFunction(default: Double = 0)(func: (Double) => Option[Double]): (Double) => Double = {
+    (x: Double) => {
+      func(x) match {
+        case Some(y) => y
+        case None => default
+      }
+    }
+  }
+
+  def toWholeFunction2(default: Double = 0)(func: (Double, Double) => Option[Double]): (Double, Double) => Double = {
+    (x: Double, y: Double) => {
+      func(x, y) match {
+        case Some(y) => y
+        case None => default
+      }
+    }
+  }
 
   def liftedSum(x: Option[Double], y: Option[Double]): Option[Double] = LiftedOperation((v1: Double, v2: Double) => v1 + v2)(x, y)
 
@@ -47,12 +64,22 @@ package object util {
   def liftedDiv(x: Option[Double], y: Option[Double]): Option[Double] = LiftedOperation((v1: Double, v2: Double) => v1 / v2)(x, y)
 
   @tailrec
-  def listToOption(l: List[Option[Double]], accum: Option[List[Double]] = Some(List())): Option[List[Double]] = {
+  def listToOption[T](l: List[Option[T]], accum: Option[List[T]] = Some(List())): Option[List[T]] = {
     (l, accum) match {
       case (_, None) => None
       case (List(), _) => accum.map(_.reverse)
       case (Some(v1) :: vs, Some(acc)) => listToOption(vs, Some(v1 :: acc))
       case (None :: vs, _) => None
+    }
+  }
+
+  @tailrec
+  def vectorToOption[T](l: Vector[Option[T]], accum: Option[Vector[T]] = Some(Vector())): Option[Vector[T]] = {
+    (l, accum) match {
+      case (_, None) => None
+      case (Vector(), _) => accum.map(_.reverse)
+      case (Some(v1) +: vs, Some(acc)) => vectorToOption(vs, Some(v1 +: acc))
+      case (None +: vs, _) => None
     }
   }
 
@@ -72,5 +99,12 @@ package object util {
       case Double.NaN => None
       case _ => Some(v)
     }
+  }
+
+  def uniformSample(interval: Interval, steps: Int): Vector[Double] = {
+    val stepSize = (interval.to - interval.from) / steps
+    (Range(0, steps + 1).map {
+      case (step) => (interval.from + step * stepSize)
+    }).toVector
   }
 }

@@ -20,7 +20,7 @@
 package com.github.fons.nr.examples
 
 import scala.math._
-import com.github.fons.nr.interpolation.{BulirschStoerNevilleStrategy, PolynomialApproximation, DataSet, Interpolator}
+import com.github.fons.nr.interpolation.{DataSet, BulirschStoerNevilleStrategy, PolynomialApproximation, Interpolator}
 import com.github.fons.nr.util.Accuracy
 
 /**
@@ -31,18 +31,20 @@ import com.github.fons.nr.util.Accuracy
  * To change this template use File | Settings | File Templates.
  */
 object BulirschStoerExample2 {
-       def run() {
+  def run() {
 
-         def f (x:Double):Double = cos(Pi*x)
-         val xvals = (for (i <- Range(0, 60)) yield 0.50 + i*0.1).toVector
-         val yvals = (xvals.map((x)=>f(x))).toVector
+    def f(x: Double): Double = cos(Pi * x)
+    val xvals = (for (i <- Range(0, 60)) yield 0.50 + i * 0.1).toVector
+    val yvals = (xvals.map((x) => f(x))).toVector
 
-         val degr = 10
-         val x = 0.705
-         val inter = new {val degree = degr
-                          val accuracy = Accuracy()} with Interpolator(DataSet(xvals, yvals)) with PolynomialApproximation with BulirschStoerNevilleStrategy
-         println(inter)
-         val resx = inter(x)
-         println("degree : " + degr + "  input : " + x + " result : " + resx + " exact : " + f(x))
-       }
+    val degr = 10
+    val x = 0.705
+    val inter = new {
+      val degree = degr
+      val accuracy = Accuracy()
+    } with Interpolator(DataSet(xvals, yvals)) with PolynomialApproximation with BulirschStoerNevilleStrategy
+    println(inter)
+    val resx = inter(x)
+    println("degree : " + degr + "  input : " + x + " result : " + resx + " exact : " + f(x))
+  }
 }

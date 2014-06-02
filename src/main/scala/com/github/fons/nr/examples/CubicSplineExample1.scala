@@ -19,8 +19,9 @@
 
 package com.github.fons.nr.examples
 
-import com.github.fons.nr.matrix.{LUSolver, PartialGaussJordanRowPivot}
+import com.github.fons.nr.matrix.LUSolver
 import com.github.fons.nr.interpolation._
+import com.github.fons.nr.interpolation.Interpolator
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,10 +32,11 @@ import com.github.fons.nr.interpolation._
  */
 
 case object CubicSplineExample1 {
-  def S2(x:Double) = {
+  def S2(x: Double) = {
     val w = (x - 2.0)
-    2.0 + w*(0.7 + w*(0.6*w - 1.8))
+    2.0 + w * (0.7 + w * (0.6 * w - 1.8))
   }
+
   def run {
     val ll = Vector(0.0, 1.0, 2.0, 3.0)
     val vs = Vector(0.0, 0.5, 2.0, 1.5)
@@ -44,7 +46,7 @@ case object CubicSplineExample1 {
     println(cs)
     println("result  x= 2.1 : ")
     cs(2.1).flatMap(_.apply()).map(println(_))
-    println("exaxt :" , S2(2.1))
+    println("exaxt :", S2(2.1))
     println("======================================")
   }
 }

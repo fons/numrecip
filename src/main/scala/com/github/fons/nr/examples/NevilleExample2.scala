@@ -19,7 +19,7 @@
 
 package com.github.fons.nr.examples
 
-import com.github.fons.nr.interpolation.{LagrangeNevilleStrategy, PolynomialApproximation, DataSet, Interpolator}
+import com.github.fons.nr.interpolation.{DataSet, LagrangeNevilleStrategy, PolynomialApproximation, Interpolator}
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,12 +31,14 @@ import com.github.fons.nr.interpolation.{LagrangeNevilleStrategy, PolynomialAppr
 object NevilleExample2 {
 
   def run {
-    val xvals = Vector(2.0,3.0,5.0,8.0)
-    val yvals = Vector(3.0,8.0,4.0,2.0)
+    val xvals = Vector(2.0, 3.0, 5.0, 8.0)
+    val yvals = Vector(3.0, 8.0, 4.0, 2.0)
     val x = 4.0
-    val results = Map((0 -> 8), (1 -> 6), (2 -> (25.0/3.0)), (3 -> (112.0/15.0)), (4 -> (112.0/15.0)))
-    for (degr <- Range(0,5)) {
-      val inter = new {val degree = degr} with Interpolator(DataSet(xvals, yvals)) with PolynomialApproximation with LagrangeNevilleStrategy
+    val results = Map((0 -> 8), (1 -> 6), (2 -> (25.0 / 3.0)), (3 -> (112.0 / 15.0)), (4 -> (112.0 / 15.0)))
+    for (degr <- Range(0, 5)) {
+      val inter = new {
+        val degree = degr
+      } with Interpolator(DataSet(xvals, yvals)) with PolynomialApproximation with LagrangeNevilleStrategy
       println(inter)
       val resx = inter(x)
       println("degree : " + degr + " x : " + x + "result : " + resx + " actual : " + results(degr))

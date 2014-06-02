@@ -19,7 +19,7 @@
 
 package com.github.fons.nr.examples
 
-import com.github.fons.nr.interpolation.{BulirschStoerNevilleStrategy, PolynomialApproximation, DataSet, Interpolator}
+import com.github.fons.nr.interpolation.{DataSet, BulirschStoerNevilleStrategy, PolynomialApproximation, Interpolator}
 import com.github.fons.nr.util.Accuracy
 
 /**
@@ -30,16 +30,18 @@ import com.github.fons.nr.util.Accuracy
  * To change this template use File | Settings | File Templates.
  */
 object BulirschStoerExample1 {
-      def run () {
-        val xvals = Vector(2.0,3.0,5.0,8.0)
-        val yvals = Vector(3.0,8.0,4.0,2.0)
+  def run() {
+    val xvals = Vector(2.0, 3.0, 5.0, 8.0)
+    val yvals = Vector(3.0, 8.0, 4.0, 2.0)
 
-        val degr = 3
-        val x = 4
-        val inter = new {val degree   = degr
-                         val accuracy = Accuracy() } with Interpolator(DataSet(xvals, yvals)) with PolynomialApproximation with BulirschStoerNevilleStrategy
-        println(inter)
-        val resx = inter(x)
-        println("degree : " + degr + "  input : " + x + " result : " + resx)
-      }
+    val degr = 3
+    val x = 4
+    val inter = new {
+      val degree = degr
+      val accuracy = Accuracy()
+    } with Interpolator(DataSet(xvals, yvals)) with PolynomialApproximation with BulirschStoerNevilleStrategy
+    println(inter)
+    val resx = inter(x)
+    println("degree : " + degr + "  input : " + x + " result : " + resx)
+  }
 }

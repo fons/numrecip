@@ -23,6 +23,7 @@ import com.github.fons.nr.interpolation._
 import com.github.fons.nr.matrix.LUSolver
 import scala.Predef._
 import com.github.fons.nr.interpolation.Interpolator
+import com.github.fons.nr.interpolation.FirstOrderDerivs
 
 /**
  * Created with IntelliJ IDEA.
@@ -33,21 +34,24 @@ import com.github.fons.nr.interpolation.Interpolator
  */
 
 object CubicSplineExample4 {
-  def S2(x:Double) = {
+  def S2(x: Double) = {
     val w = (x - 2.0)
-    2.0 + w * (0.68 + w * (-1.86 + w * 0.68 ))
+    2.0 + w * (0.68 + w * (-1.86 + w * 0.68))
   }
+
   def run {
     val ll = Vector(0.0, 1.0, 2.0, 3.0)
     val vs = Vector(0.0, 0.5, 2.0, 1.5)
-    val cs = new { val derivs = FirstOrderDerivs(0.2, -1.0)} with Interpolator(DataSet(ll, vs)) with CubicSpline with ClampedSpline with LUSolver
+    val cs = new {
+      val derivs = FirstOrderDerivs(0.2, -1.0)
+    } with Interpolator(DataSet(ll, vs)) with CubicSpline with ClampedSpline with LUSolver
 
     println(ll)
     println(vs)
     println(cs)
     println("result  x= 2.1 : ")
     cs(2.1).flatMap(_()).map(println _)
-    println("exaxt :" , S2(2.1))
+    println("exaxt :", S2(2.1))
     println("======================================")
   }
 }

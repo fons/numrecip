@@ -27,6 +27,8 @@ package com.github.fons.nr.interpolation
  * To change this template use File | Settings | File Templates.
  */
 object DataSet {
+
+
   def apply(xvals: Vector[Double], yvals: Vector[Double]) = new DataSet(xvals, yvals)
 
   def apply(vals: Seq[(Double, Seq[Double])]) = {
@@ -49,21 +51,21 @@ object DataSet {
 
 //TODO : persistence
 //TODO : from/to file; csv,,,
-case class DataSet(dataSet : (Vector[Double], Vector[Vector[Double]])) {
-  def this(xvals:Vector[Double], yvals:Vector[Double]) = this((xvals, Vector(yvals)))
+case class DataSet(dataSet: (Vector[Double], Vector[Vector[Double]])) {
+  def this(xvals: Vector[Double], yvals: Vector[Double]) = this((xvals, Vector(yvals)))
 
   val independend = dataSet._1
-  val dependend   = dataSet._2
+  val dependend = dataSet._2
 
-  def apply(idx:Int) : Option[Vector[Double]] = if (dataSet._2.isDefinedAt(idx) == true) Some(dataSet._2(idx)) else None
+  def apply(idx: Int): Option[Vector[Double]] = if (dataSet._2.isDefinedAt(idx) == true) Some(dataSet._2(idx)) else None
 
-  def pp () {
+  def pp() {
     val number_of_data_points = dataSet._1.length
-    val number_of_data_sets   = dataSet._2.length
-    val hd = (for (i<- Range(0, number_of_data_sets)) yield "dataset_" + (i+1).toString + "  ").reduce(_ + _)
+    val number_of_data_sets = dataSet._2.length
+    val hd = (for (i <- Range(0, number_of_data_sets)) yield "dataset_" + (i + 1).toString + "  ").reduce(_ + _)
     val header = "  index  independent   " + hd
     println(header)
-    for (index  <- Range(0, number_of_data_points)) {
+    for (index <- Range(0, number_of_data_points)) {
       print(f"$index%5d")
       print("  ")
       val val_1 = dataSet._1(index)
@@ -80,5 +82,5 @@ case class DataSet(dataSet : (Vector[Double], Vector[Vector[Double]])) {
   }
 
   override
-  def toString = "DataSet@" + hashCode() + " : [ number of values : " + independend.length +  "]"
+  def toString = "DataSet@" + hashCode() + " : [ number of values : " + dataSet._2 + "]"
 }

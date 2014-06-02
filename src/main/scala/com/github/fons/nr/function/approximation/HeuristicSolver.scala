@@ -69,7 +69,7 @@ trait HeuristicSolver extends HeuristicSolverT {
   private
   def heuristically_determine_approx(func: (Double) => Option[Double], app: approxT, interval: Interval, N: Int, iter: Int): Option[((Double) => Option[Double], Int)] = {
     val approx = app(func, N)
-    //println("iter : ", iter, "  N : " + N)
+    println("iter : ", iter, "  N : " + N)
     iter match {
       case 0 => None //doesn't converge so return NONE Some((approx, N))
       case _ if (continue_search(func, approx) == true) => heuristically_determine_approx(func, app, interval, 2 * N - 1, iter - 1)

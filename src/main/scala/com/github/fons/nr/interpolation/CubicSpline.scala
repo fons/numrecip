@@ -19,6 +19,7 @@
 
 package com.github.fons.nr.interpolation
 
+
 /**
  * Created with IntelliJ IDEA.
  * User: fons
@@ -37,6 +38,7 @@ trait CubicSpline extends InterpolatorT with SplineStrategy {
   private
   case class Spline(from: Double, to: Double, s1: Double, s2: Double, s3: Double, y: Double) extends InterpolationT {
     private def S(w: Double) = Some(((s3 * w + s2) * w + s1) * w + y)
+
     def apply(x: Double): Option[Double] = {
       if (x < from || x > to) None else S((x - from))
     }

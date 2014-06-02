@@ -21,6 +21,7 @@ package com.github.fons.nr.interpolation
 
 import scala.annotation.tailrec
 
+
 /**
  * Created with IntelliJ IDEA.
  * User: fons
@@ -54,12 +55,12 @@ trait InterpolatorT {
 
   protected def className[A](a: A)(implicit m: Manifest[A]) = m.toString
 
-  protected def initialize (dataSet: DataSet): Option[Vector[InterpolationSet]] = None
+  protected def initialize(dataSet: DataSet): Option[Vector[InterpolationSet]] = None
 
   def interpolate(x: Double): Option[InterpolationResult] = {
-    val Iidx = find_close(dataSet.independend.length, x, dataSet.independend, (0, dataSet.independend.length-1))
+    val Iidx = find_close(dataSet.independend.length, x, dataSet.independend, (0, dataSet.independend.length - 1))
     (Iidx, Sinterpolators) match {
-      case (Some(idx), Some(inter_list)) => Some(InterpolationResult(x , for (inter <- inter_list) yield inter(idx).flatMap(_(x)),this.toString))
+      case (Some(idx), Some(inter_list)) => Some(InterpolationResult(x, for (inter <- inter_list) yield inter(idx).flatMap(_(x)), this.toString))
       case _ => None
     }
   }

@@ -19,7 +19,7 @@
 
 package com.github.fons.nr.ode
 
-import com.github.fons.nr.interpolation.{InterpolatorT, DataSet}
+import com.github.fons.nr.interpolation.{DataSet, InterpolatorT}
 
 /**
  * Created with IntelliJ IDEA.
@@ -30,31 +30,35 @@ import com.github.fons.nr.interpolation.{InterpolatorT, DataSet}
  */
 
 
-case class OdeResult(init : (Double, List[Double]), end : (Double, List[Double]), override val dataSet:DataSet, private val odestr : String) extends InterpolatorT {
+case class OdeResult(init: (Double, List[Double]), end: (Double, List[Double]), override val dataSet: DataSet, private val odestr: String) extends InterpolatorT {
 
-  private def collect(agg: Option[List[Double]], value : Option[Double]):Option[List[Double]] = {
+  private def collect(agg: Option[List[Double]], value: Option[Double]): Option[List[Double]] = {
     (agg, value) match {
-      case (Some(xs), Some(x)) => Some(x::xs)
+      case (Some(xs), Some(x)) => Some(x :: xs)
       case _ => None
     }
   }
 
-  def this(odeResult : OdeResult) = this(odeResult.init, odeResult.end, odeResult.dataSet, odeResult.odestr)
+  def this(odeResult: OdeResult) = this(odeResult.init, odeResult.end, odeResult.dataSet, odeResult.odestr)
 
-  def first     = init._1
-  def last      = end._1
-  def head      = init._2
-  def tail      = end._2
+  def first = init._1
 
-  def apply() : Option[List[Double]] = if (end._2.length > 0) Some(end._2) else None
+  def last = end._1
 
-  def apply(v : Double) : Option[List[Double]] = {
-    v match  {
-      case init._1  => Some(head)
-      case end._1   => Some(tail)
-      case _        => interpolate(v).flatMap(_())
+  def head = init._2
+
+  def tail = end._2
+
+  def apply(): Option[List[Double]] = if (end._2.length > 0) Some(end._2) else None
+
+  def apply(v: Double): Option[List[Double]] = {
+    v match {
+      case init._1 => Some(head)
+      case end._1 => Some(tail)
+      case _ => interpolate(v).flatMap(_())
     }
   }
+
   override
   def toString = className(this) + " " + dataSet + " " + odestr
 }

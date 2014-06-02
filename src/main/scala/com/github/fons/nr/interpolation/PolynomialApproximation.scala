@@ -19,7 +19,6 @@
 
 package com.github.fons.nr.interpolation
 
-import scala.annotation.tailrec
 
 /**
  * Created with IntelliJ IDEA.
